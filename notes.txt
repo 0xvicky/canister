@@ -1,0 +1,29 @@
+1. Ownership is the set of rules which a program must followed to get compiled properly.
+2. To get rid of garbage collector or similar concepts to manage the memory, rust uses different approach that works on concept of ownership.
+3. If program violates any of rules, the program won't compiled
+4. Heap and Stack are the two main data structures which works in ownership under the hood.
+5. Stack is a data structure which stores the element just like a stack of plate, the Last element inserted will come out first
+6. But the size of the element must be known at the compile time.
+7. If the element size is unknown then it should be stored in the heap.
+8. The pointer to the data stored in the heap is stored in the stack
+9. Putting data in heap is known as allocation
+10. Pushing data to the stack is comparatively easy as data is always going to be stored on the stack
+11. Accessing data in the heap is slower because you have to follow a pointer to get to the data
+12. Each value in rust has a owner.
+13. There can only be one owner at a time
+14. When the owner goes out of scope, value dropped
+15. We are goin to understand with help of Strings, so string literal are the types which are immutable and have fixed size so can be stored in stack
+16. We then have String that are are also for string, but string is stored in heap, we don't know the size at compile time
+17. So while storing the String in the heap, we first need to ask memory allocator for the memory in the heap in runtime
+18. and second what we want is, return the memory when we are done with our String
+19. The first part is done by us, by calling "from" function in String, so it request for the memory in the heap in runtime -> String::from()
+20. The second part is different as in most languages we have garbage collector but here when is scope is done, the compiler automatically calls the drop function at the curly braces, which returns the memory in the heap in runtime
+21. If let say we have s1 String variable and we do s2 = s1, then s1 will be invalidated, if say s1 is still validated, then it will cause an error call Double free Error
+22. Shallow Copy : Shallow copy is concept of copying the pointer, the length and the capacity and not the data.
+23. But here, after s2 = s1, instead shallow copy, we call it move, that move happens from s1 to s2.
+24. Rust never do the deep copy of your data, deep copy is when your data is also being copied...
+25. To do deep copy, that is to copy whole data, and not just the stack, we use clone() method.
+26. When you do integers, s1=s2, then it copied from stack, because the data size is fixed.
+27. Instead of doing deep copy, we can use references where the location where the data is stored gets point from another variable who wants to access the value
+28. References are of two types, Immutable and mutable
+29.
