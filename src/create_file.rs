@@ -36,6 +36,7 @@ pub fn create(config: CreateFile) -> Result<String, &'static str> {
     match fs::write(&config.file_path, config.content) {
         Ok(_) => {
             println!("File Created Successfully");
+            // Cipher::encrypt("")
             Ok(config.file_path)
         }
         Err(_) => Err("Error writing"),

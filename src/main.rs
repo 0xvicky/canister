@@ -5,6 +5,7 @@ mod update_file;
 mod utils;
 
 // use std::error::Error;
+
 use create_file::CreateFile;
 use utils::handle_choice;
 use utils::handle_input;
@@ -145,7 +146,6 @@ fn main() {
                     println!("Bye");
                     break;
                 }
-
                 _ => {
                     println!("Invalid Choice");
                 }
