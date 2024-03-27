@@ -1,11 +1,11 @@
 mod create_file;
+mod delete_file;
 mod read_file;
 mod update_file;
 mod utils;
 
 // use std::error::Error;
 use create_file::CreateFile;
-
 use utils::handle_choice;
 use utils::handle_input;
 
@@ -99,7 +99,6 @@ fn main() {
                 }
                 3 => {
                     println!("Enter the file path");
-
                     let file_path = match handle_input() {
                         Ok(path) => path,
                         Err(err) => {
@@ -107,6 +106,7 @@ fn main() {
                             continue;
                         }
                     };
+
                     println!("Enter the new content");
                     let content = match handle_input() {
                         Ok(content) => content,
@@ -125,7 +125,21 @@ fn main() {
                     }
                 }
                 4 => {
-                    println!("Deleting file...");
+                    println!("Enter file path to delete file");
+                    let file_path = match handle_input() {
+                        Ok(path) => path,
+                        Err(err) => {
+                            println!("Error while deleting file, {}", err);
+                            continue;
+                        }
+                    };
+                    match delete_file::delete(&file_path) {
+                        Ok(_) => (),
+                        Err(_) => {
+                            println!("Error while deleting");
+                            continue;
+                        }
+                    }
                 }
                 5 => {
                     println!("Bye");
