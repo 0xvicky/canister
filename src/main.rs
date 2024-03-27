@@ -1,78 +1,13 @@
+mod create_file;
+mod read_file;
+mod update_file;
+mod utils;
+
 // use std::error::Error;
-use std::fs;
-use std::io;
+use create_file::CreateFile;
 
-#[derive(Debug)]
-struct CreateFile {
-    file_path: String,
-    file_name: String,
-    content: String,
-}
-
-impl CreateFile {
-    fn build(
-        directory_path: &mut str,
-        file_name: &str,
-        content: &str,
-    ) -> Result<CreateFile, &'static str> {
-        if directory_path.is_empty() {
-            return Err("Invalid directory path");
-        }
-        if file_name.is_empty() {
-            return Err("Invalid file name");
-        }
-        let directory_path = directory_path.trim();
-        let file_name = file_name.trim();
-        let content = content.trim();
-
-        let file_path: String = format!("{}/{}.txt", directory_path, file_name);
-        println!("{}", file_path);
-        Ok(CreateFile {
-            file_path,
-            file_name: file_name.to_owned(),
-            content: content.to_owned(),
-        })
-    }
-}
-
-// fn trim_path(input: &mut str) -> Result<String, &'static str> {}
-fn handle_choice() -> Result<u32, &'static str> {
-    let mut input_choice: String = String::new();
-    match io::stdin().read_line(&mut input_choice) {
-        Ok(_) => match input_choice.trim().parse::<u32>() {
-            Ok(res) => Ok(res),
-            Err(_) => Err("Error Parsing"),
-        },
-        Err(_) => Err("Error reading input"),
-    }
-    // let input_choice = input_choice.trim().parse::<u32>().expect("Cannot parse");
-
-    // Ok(input_choice)
-}
-
-fn handle_input() -> Result<String, &'static str> {
-    let mut input: String = String::new();
-
-    match io::stdin().read_line(&mut input) {
-        Ok(_) => {
-            input = input.trim().to_string();
-            Ok(input)
-        }
-        Err(_) => Err("Error reading input"),
-    }
-}
-
-fn create_file(config: CreateFile) -> Result<String, &'static str> {
-    match fs::write(&config.file_path, config.content) {
-        Ok(_) => {
-            println!("File Created Successfully");
-            Ok(config.file_path)
-        }
-        Err(_) => Err("Error writing"),
-    }
-
-    // Ok(file_path)
-}
+use utils::handle_choice;
+use utils::handle_input;
 
 fn main() {
     loop {
@@ -127,7 +62,7 @@ fn main() {
                         }
                     };
                     // dbg!(config);
-                    let path = match create_file(config) {
+                    let path = match create_file::create(config) {
                         Ok(path) => path,
                         Err(err) => {
                             println!("Error creating config,{}", err);
@@ -138,10 +73,56 @@ fn main() {
                     println!("{}", path);
                 }
                 2 => {
-                    println!("Reading file...");
+                    println!("Enter the file path:");
+                    //takes the path of the file
+                    let file_path = match handle_input() {
+                        Ok(path) => {
+                            println!("{}", path);
+                            path
+                        }
+                        Err(err) => {
+                            println!("Error reading file,{}", err);
+                            continue;
+                        }
+                    };
+                    //return the content as string as output
+                    match read_file::read(&file_path) {
+                        Ok(content) => {
+                            println!("{}", content);
+                            content
+                        }
+                        Err(err) => {
+                            println!("Error reading file,{}", err);
+                            continue;
+                        }
+                    };
                 }
                 3 => {
-                    println!("Updating file...");
+                    println!("Enter the file path");
+
+                    let file_path = match handle_input() {
+                        Ok(path) => path,
+                        Err(err) => {
+                            println!("Error reading file path,{}", err);
+                            continue;
+                        }
+                    };
+                    println!("Enter the new content");
+                    let content = match handle_input() {
+                        Ok(content) => content,
+                        Err(err) => {
+                            println!("Error while reading content, {}", err);
+                            continue;
+                        }
+                    };
+
+                    match update_file::update(&file_path, &content) {
+                        Ok(_) => (),
+                        Err(_) => {
+                            println!("Error while updating");
+                            continue;
+                        }
+                    }
                 }
                 4 => {
                     println!("Deleting file...");
