@@ -1,5 +1,5 @@
+use crate::utils;
 use std::fs;
-
 #[derive(Debug)]
 pub struct CreateFile {
     file_path: String,
@@ -43,4 +43,52 @@ pub fn create(config: CreateFile) -> Result<String, &'static str> {
     }
 
     // Ok(file_path)
+}
+
+pub fn create_file_action() {
+    println!("Creating File...");
+    println!("=========================");
+    println!("Enter Directory path: ");
+    let mut directory_path = match utils::handle_input() {
+        Ok(path) => path,
+        Err(err) => {
+            println!("Error creating directory,{}", err);
+            return;
+        }
+    };
+    println!("Enter File name: ");
+    let mut file_name = match utils::handle_input() {
+        Ok(file) => file,
+        Err(err) => {
+            println!("Error creating file,{}", err);
+            return;
+        }
+    };
+    println!("Enter Content: ");
+    let mut content = match utils::handle_input() {
+        Ok(content) => content,
+
+        Err(err) => {
+            println!("Error creating content,{}", err);
+            return;
+        }
+    };
+
+    let config = match CreateFile::build(&mut directory_path, &mut file_name, &mut content) {
+        Ok(config) => config,
+        Err(err) => {
+            println!("Error creating config,{}", err);
+            return;
+        }
+    };
+    // dbg!(config);
+    let path = match create(config) {
+        Ok(path) => path,
+        Err(err) => {
+            println!("Error creating config,{}", err);
+            return;
+        }
+    };
+
+    println!("{}", path);
 }

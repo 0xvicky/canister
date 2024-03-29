@@ -1,4 +1,5 @@
 use std::io;
+
 pub fn handle_choice() -> Result<u32, &'static str> {
     let mut input_choice: String = String::new();
     match io::stdin().read_line(&mut input_choice) {

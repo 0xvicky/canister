@@ -13,8 +13,6 @@ Canister is a Rust project that provides basic file system interaction functiona
 2. Navigate to the project directory.
 3. Run the application using the Rust compiler:
 
-
-
 ## Usage
 1. Upon running the application, you will be presented with a menu prompting you to choose an action.
 2. Enter the corresponding number to perform the desired operation.
@@ -32,9 +30,6 @@ Canister is a Rust project that provides basic file system interaction functiona
 
 ## Contributions
 Contributions to the Canister project are welcome! If you have any suggestions, bug reports, or feature requests, please feel free to open an issue or submit a pull request on the project's GitHub repository.
-
-## License
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 ## Connect with Me
 Let's connect on [LinkedIn](https://www.linkedin.com/in/vivek-tyagi-a7a210165/)!
