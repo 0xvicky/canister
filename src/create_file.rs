@@ -1,4 +1,5 @@
 use crate::utils;
+use std::error::Error;
 use std::fs;
 #[derive(Debug)]
 pub struct CreateFile {
@@ -32,63 +33,36 @@ impl CreateFile {
     }
 }
 
-pub fn create(config: CreateFile) -> Result<String, &'static str> {
-    match fs::write(&config.file_path, config.content) {
-        Ok(_) => {
-            println!("File Created Successfully");
-            // Cipher::encrypt("")
-            Ok(config.file_path)
-        }
-        Err(_) => Err("Error writing"),
-    }
-
+pub fn create(config: CreateFile) -> Result<(), Box<dyn Error>> {
+    fs::write(&config.file_path, config.content)?;
+    Ok(())
     // Ok(file_path)
 }
 
-pub fn create_file_action() {
+pub fn create_file_action() -> Result<(), Box<dyn Error>> {
     println!("Creating File...");
     println!("=========================");
+
+    // Get directory path
     println!("Enter Directory path: ");
-    let mut directory_path = match utils::handle_input() {
-        Ok(path) => path,
-        Err(err) => {
-            println!("Error creating directory,{}", err);
-            return;
-        }
-    };
+    let mut directory_path = utils::handle_input()?;
+
+    // Get file name
     println!("Enter File name: ");
-    let mut file_name = match utils::handle_input() {
-        Ok(file) => file,
-        Err(err) => {
-            println!("Error creating file,{}", err);
-            return;
-        }
-    };
+    let mut file_name = utils::handle_input()?;
+
+    // Get content
     println!("Enter Content: ");
-    let mut content = match utils::handle_input() {
-        Ok(content) => content,
+    let mut content = utils::handle_input()?;
 
-        Err(err) => {
-            println!("Error creating content,{}", err);
-            return;
-        }
-    };
+    // Build configuration
+    let config = CreateFile::build(&mut directory_path, &mut file_name, &mut content)?;
 
-    let config = match CreateFile::build(&mut directory_path, &mut file_name, &mut content) {
-        Ok(config) => config,
-        Err(err) => {
-            println!("Error creating config,{}", err);
-            return;
-        }
-    };
-    // dbg!(config);
-    let path = match create(config) {
-        Ok(path) => path,
-        Err(err) => {
-            println!("Error creating config,{}", err);
-            return;
-        }
-    };
+    // Create file
+    let path = create(config)?;
 
-    println!("{}", path);
+    // Print file path
+    println!("{:?}", path);
+
+    Ok(())
 }
