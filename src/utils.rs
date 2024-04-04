@@ -1,27 +1,16 @@
+use std::error::Error;
 use std::io;
 
-pub fn handle_choice() -> Result<u32, &'static str> {
+pub fn handle_choice() -> Result<u32, Box<dyn Error>> {
     let mut input_choice: String = String::new();
-    match io::stdin().read_line(&mut input_choice) {
-        Ok(_) => match input_choice.trim().parse::<u32>() {
-            Ok(res) => Ok(res),
-            Err(_) => Err("Error Parsing"),
-        },
-        Err(_) => Err("Error reading input"),
-    }
-    // let input_choice = input_choice.trim().parse::<u32>().expect("Cannot parse");
-
-    // Ok(input_choice)
+    io::stdin().read_line(&mut input_choice)?;
+    let input_choice = input_choice.trim().parse::<u32>()?;
+    Ok(input_choice)
 }
 
-pub fn handle_input() -> Result<String, &'static str> {
+pub fn handle_input() -> Result<String, Box<dyn Error>> {
     let mut input: String = String::new();
-
-    match io::stdin().read_line(&mut input) {
-        Ok(_) => {
-            input = input.trim().to_string();
-            Ok(input)
-        }
-        Err(_) => Err("Error reading input"),
-    }
+    io::stdin().read_line(&mut input)?;
+    let input = input.trim().to_string();
+    Ok(input)
 }
